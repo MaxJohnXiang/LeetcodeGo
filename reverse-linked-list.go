@@ -1,16 +1,18 @@
 // package problem0206
 
 func reverseList(head *ListNode) *ListNode {
-	// prev 是所有已经逆转的节点的head
-	var prev *ListNode
+	//  a->b->c->d
+	//记录这个空节点
+	var prevNode *ListNode
 	cur := head
 	for cur != nil {
 		temp := cur.Next
-		cur.Next = prev
-		prev = cur
+		cur.Next = prevNode
+		//游标转换
+		prevNode = cur
 		cur = temp
 	}
-	return prev
+	return prevNode
 }
 
 // // ListNode 是链接节点
