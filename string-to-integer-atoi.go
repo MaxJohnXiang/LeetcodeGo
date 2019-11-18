@@ -1,51 +1,75 @@
-
-
-// import (
-// 	"math"
-// 	"strings"
-// )
-
 // package problem0008
+//
+// import "strings"
+// import "math"
 
+//
+// Example 1:
+//
+//
+// Input: "42"
+// Output: 42
+//
+//
+// Example 2:
+//
+//
+// Input: "   -42"
+// Output: -42
+// Explanation: The first non-whitespace character is '-', which is the minus sign.
+//              Then take as many numerical digits as possible, which gets 42.
+//
+//
+// Example 3:
+//
+//
+// Input: "4193 with words"
+// Output: 4193
+// Explanation: Conversion stops at digit '3' as the next character is not a numerical digit.
+//
 func myAtoi(s string) int {
-	return convert(clean(s))
-}
 
-func clean(s string) (sign int, abs string) {
+	//If no valid conversion could be performed, a zero value is returned.
+
+	//If the first sequence of non-whitespace characters in str is not a valid integral number, or if no such sequence exists because either str is empty or it contains only whitespace characters, no conversion is performed.
+
+	//Only the space character ' ' is considered as whitespace character.
 	s = strings.TrimSpace(s)
+
 	if s == "" {
-		return
+		return 0
 	}
-	switch s[0] {
-	case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
-		sign, abs = 1, s
-	case '+':
-		sign, abs = 1, s[1:]
-	case '-':
-		sign, abs = -1, s[1:]
-	default:
-		abs = ""
-		return
+	first := s[0]
+
+	sign := 1
+	if first == '+' {
+		sign = 1
+		s = s[1:]
+	} else if first == '-' {
+		sign = -1
+		s = s[1:]
+	} else if first < '0' || first > '9' {
+		return 0
 	}
-	for i, b := range abs {
-		if b > '9' || b < '0' {
-			abs = abs[:i]
+
+	//convert
+	res := 0
+	for i := 0; i < len(s); i++ {
+		if s[i] > '9' || s[i] < '0' {
 			break
 		}
-	}
-	return
-}
+		temp := int(s[i] - '0')
 
-func convert(sign int, s string) int {
-	ans := 0
-	for _, b := range s {
-		ans = ans*10 + int(b-'0')
-		if sign == -1 && ans*sign < math.MinInt32 {
-			return math.MinInt32
+		if res > math.MaxInt32/10 || res == math.MaxInt32/10 && temp > math.MaxInt32%10 {
+			if sign == 1 {
+				return math.MaxInt32
+			}
+			if sign == -1 {
+				return math.MinInt32
+			}
 		}
-		if sign == 1 && ans*sign > math.MaxInt32 {
-			return math.MaxInt32
-		}
+		res = res*10 + temp
 	}
-	return ans * sign
+	//Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [−231,  231 − 1]. If the numerical value is out of the range of representable values, INT_MAX (231 − 1) or INT_MIN (−231) is returned.
+	return res * sign
 }
