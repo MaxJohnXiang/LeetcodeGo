@@ -3,23 +3,27 @@
 // import (
 // 	"strings"
 // )
-
+//
 func convert(s string, numRows int) string {
 	if numRows == 1 {
 		return s
 	}
-	flag, cur := false, 0
-	strArr := make([]string, numRows)
-	for _, v := range s {
-		strArr[cur] += string(v)
-		if cur == 0 || cur == numRows-1 {
+
+	flag := false
+	curIndex := 0
+
+	res := make([]string, numRows)
+	for i := 0; i < len(s); i++ {
+		if curIndex == 0 || curIndex == numRows-1 {
 			flag = !flag
 		}
+		res[curIndex] += string(s[i])
+
 		if flag {
-			cur++
+			curIndex++
 		} else {
-			cur--
+			curIndex--
 		}
 	}
-	return strings.Join(strArr, "")
+	return strings.Join(res, "")
 }
