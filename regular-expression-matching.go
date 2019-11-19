@@ -1,47 +1,59 @@
 // package problem0010
 
-// 1, If p.charAt(j) == s.charAt(i) :  dp[i][j] = dp[i-1][j-1];
-//    如果p[j]== s[i] , 这个状态依赖于前一个状态
-// 2, If p.charAt(j) == '.' : dp[i][j] = dp[i-1][j-1];
-
-// 3, If p.charAt(j) == '*':
-//    here are two sub conditions:
-//                1   if p.charAt(j-1) != s.charAt(i) : dp[i][j] = dp[i][j-2]  //in this case, a* only counts as empty
-//                2   if p.charAt(i-1) == s.charAt(i) or p.charAt(i-1) == '.':
-//                               dp[i][j] = dp[i-1][j]    //in this case, a* counts as multiple a
-//                            or dp[i][j] = dp[i][j-1]   // in this case, a* counts as single a
-//                            or dp[i][j] = dp[i][j-2]   // in this case, a* counts as empty
-
 func isMatch(s, p string) bool {
-	dp := make([][]bool, len(s)+1)
+	sSize := len(s)
+	pSize := len(p)
+
+	dp := make([][]bool, sSize+1)
 	for i := range dp {
-		dp[i] = make([]bool, len(p)+1)
+		dp[i] = make([]bool, pSize+1)
 	}
 
-	//初始化
-	//都是空字符串的情况下
+	/* dp[i][j] 代表了 s[:i] 能否与 p[:j] 匹配 */
+
 	dp[0][0] = true
-
-	// s = ""  p = "b*a*"
-
-	for i := 1; i < len(dp[0]); i++ {
-		if p[i-1] == '*' {
-			dp[0][i] = dp[0][i-2]
+	/**
+	 * 根据题目的设定， "" 可以与 "a*b*c*" 相匹配
+	 * 所以，需要把相应的 dp 设置成 true
+	 *  j第二个开始, 每次步长是2
+	 */
+	for j := 1; j < pSize && dp[0][j-1]; j += 2 {
+		if p[j] == '*' {
+			dp[0][j+1] = true
 		}
 	}
 
-	for i := 1; i <= len(s); i++ {
-		for j := 1; j <= len(p); j++ {
-			if s[i-1] == p[j-1] || p[j-1] == '.' {
+	for i := 1; i < sSize+1; i++ {
+		for j := 1; j < pSize+1; j++ {
+			parten := p[j-1]
+			str := s[i-1]
+
+			if parten == '.' || parten == str {
 				dp[i][j] = dp[i-1][j-1]
-			} else if p[j-1] == '*' {
-				if p[j-2] == s[i-1] || p[j-2] == '.' {
-					dp[i][j] = dp[i][j-2] || dp[i-1][j]
-				} else {
+			} else if parten == '*' {
+				prevParten := p[j-2]
+				if prevParten != '.' && prevParten != str {
+					//因为前一个字符和当前text不匹配，而
+					//* 则是通过匹配前一个字符一次，或者多次来实现匹配， 所以，
+					//只能是匹配0次
 					dp[i][j] = dp[i][j-2]
+				} else {
+					//这种情况p[j-1] == s[i], 可以通过匹配一次，或者多次的情况解决问题
+					//parten == * 要分好几种情况
+					/**
+					* 1. 匹配0次
+					 */
+					matchZero := dp[i][j-2]
+					//匹配1次
+					matchOnce := dp[i][j-1]
+					//匹配多次
+					matchMul := dp[i-1][j]
+					dp[i][j] = matchZero || matchOnce || matchMul
 				}
+			} else {
+				dp[i][j] = false
 			}
 		}
 	}
-	return dp[len(s)][len(p)]
+	return dp[sSize][pSize]
 }
