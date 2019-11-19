@@ -40,8 +40,8 @@ func myAtoi(s string) int {
 		return 0
 	}
 	first := s[0]
-
 	sign := 1
+
 	if first == '+' {
 		sign = 1
 		s = s[1:]
@@ -52,14 +52,12 @@ func myAtoi(s string) int {
 		return 0
 	}
 
-	//convert
 	res := 0
 	for i := 0; i < len(s); i++ {
-		if s[i] > '9' || s[i] < '0' {
+		if s[i] < '0' || s[i] > '9' {
 			break
 		}
 		temp := int(s[i] - '0')
-
 		if res > math.MaxInt32/10 || res == math.MaxInt32/10 && temp > math.MaxInt32%10 {
 			if sign == 1 {
 				return math.MaxInt32
@@ -70,6 +68,5 @@ func myAtoi(s string) int {
 		}
 		res = res*10 + temp
 	}
-	//Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [−231,  231 − 1]. If the numerical value is out of the range of representable values, INT_MAX (231 − 1) or INT_MIN (−231) is returned.
 	return res * sign
 }
