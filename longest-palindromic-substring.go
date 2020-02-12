@@ -1,31 +1,26 @@
 // package problem0005
 
 func longestPalindrome(s string) string {
-	//动态规划
 	if len(s) < 2 {
-		//肯定是回文
 		return s
 	}
-	var max string
+
+	dp := make([][]bool, 0)
+
 	for i := 0; i < len(s); i++ {
-		max = isPalindrome(s, i, i, max)
-		max = isPalindrome(s, i, i+1, max)
+		dp = append(dp, make([]bool, len(s)))
 	}
 
-	return max
-}
-
-//找到最长的回文
-func isPalindrome(s string, i int, j int, max string) string {
-	var sub string
-	for (i >= 0 && j < len(s)) && s[i] == s[j] {
-		sub = s[i : j+1]
-		i--
-		j++
+	maxLen := 0
+	res := ""
+	for i := len(s) - 1; i >= 0; i-- {
+		for j := i; j < len(s); j++ {
+			dp[i][j] = s[i] == s[j] && (j-i <= 2 || dp[i+1][j-1])
+			if dp[i][j] && j-i+1 >= maxLen {
+				maxLen = j - i + 1
+				res = s[i : j+1]
+			}
+		}
 	}
-	if len(sub) > len(max) {
-		max = sub
-	}
-
-	return max
+	return res
 }
