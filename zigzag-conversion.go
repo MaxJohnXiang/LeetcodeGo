@@ -9,15 +9,17 @@ func convert(s string, numRows int) string {
 		return s
 	}
 
+	// dir
 	flag := false
+
 	curIndex := 0
 
 	res := make([]string, numRows)
-
 	for i := 0; i < len(s); i++ {
 		if curIndex == 0 || curIndex+1 == numRows {
 			flag = !flag
 		}
+
 		res[curIndex] += string(s[i])
 
 		if flag {
@@ -25,6 +27,7 @@ func convert(s string, numRows int) string {
 		} else {
 			curIndex--
 		}
+
 	}
 
 	return strings.Join(res, "")
