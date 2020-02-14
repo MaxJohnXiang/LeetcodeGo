@@ -4,25 +4,25 @@ func longestCommonPrefix(strs []string) string {
 	if len(strs) < 1 {
 		return ""
 	}
-	s := shortest(strs)
-	i, j := 0, len(s)
+	prefix := shortest(strs)
+	i, j := 0, len(prefix)
+
 	for _, v := range strs {
-		//这个最小的字符串， 是否是longestCommonPrefix
-		for v[i:j] != s {
+		for v[i:j] != prefix {
 			j--
-			s = s[i:j]
+			prefix = prefix[i:j]
 		}
 	}
-	return s
-}
 
+	return prefix
+}
 func shortest(strs []string) string {
-	s := strs[0]
+	minLen := strs[0]
 
 	for _, v := range strs {
-		if len(v) < len(s) {
-			s = v
+		if len(v) < len(minLen) {
+			minLen = v
 		}
 	}
-	return s
+	return minLen
 }
