@@ -7,6 +7,7 @@
 
 func readBinaryWatch(n int) []string {
 	res := make([]string, 0, 8)
+	//用一个bool 数组来表示led 是否亮
 	leds := make([]bool, 10)
 
 	var dfs func(int, int)
@@ -20,7 +21,7 @@ func readBinaryWatch(n int) []string {
 			return
 		}
 
-		for i := idx; i < len(leds)-n+1; i++ {
+		for i := idx; i < len(leds); i++ {
 			leds[i] = true
 			dfs(i+1, n-1)
 			leds[i] = false
@@ -33,6 +34,8 @@ func readBinaryWatch(n int) []string {
 
 	return res
 }
+
+// minNums = []int{1, 2, 4, 8, 16, 32, 1, 2, 4, 8} // 0-5 min 6-9 h
 
 var bs = []int{1, 2, 4, 8, 16, 32}
 
