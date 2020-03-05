@@ -1,5 +1,5 @@
 // package problem0007
-//
+
 // import (
 // 	"math"
 // )
