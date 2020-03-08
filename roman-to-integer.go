@@ -11,14 +11,19 @@ func romanToInt(s string) int {
 		'M': 1000,
 	}
 
+	prev := m[s[len(s)-1]]
 	res := 0
-	for i := 0; i < len(s); i++ {
+	for i := len(s) - 1; i >= 0; i-- {
+		cur := m[s[i]]
 
-		if (i < len(s)-1) && m[s[i]] < m[s[i+1]] {
-			res -= m[s[i]]
+		if cur < prev {
+			res -= cur
 		} else {
-			res += m[s[i]]
+			res += cur
 		}
+
+		//如果比上一个小
+		prev = cur
 	}
 
 	return res
