@@ -16,13 +16,15 @@ func longestCommonPrefix(strs []string) string {
 
 	return prefix
 }
+
 func shortest(strs []string) string {
-	minLen := strs[0]
+	min := strs[0]
 
 	for _, v := range strs {
-		if len(v) < len(minLen) {
-			minLen = v
+		if len(v) < len(min) {
+			min = v
 		}
 	}
-	return minLen
+
+	return min
 }
