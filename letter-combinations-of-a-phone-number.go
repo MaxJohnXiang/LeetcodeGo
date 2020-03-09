@@ -1,5 +1,5 @@
 // package problem0017
-
+//
 // import (
 // 	"strings"
 // )
@@ -15,27 +15,27 @@ var m = map[string][]string{
 	"9": []string{"w", "x", "y", "z"},
 }
 
+//                2
+//		a           b               c
+//	ad ae af    bd be bf        cd ce cf
+
 func letterCombinations(digits string) []string {
-	//corner acse
+	//corner case
 	if digits == "" {
 		return nil
 	}
-
-	digs := strings.Split(digits, "")
-
 	res := make([]string, 0)
 	var dfs func(string, []string)
+
 	dfs = func(temp string, digits []string) {
 		if len(digits) == 0 {
 			res = append(res, temp)
 			return
 		}
-		charArr := m[digits[0]]
-		digits = digits[1:]
-		for _, v := range charArr {
-			dfs(temp+v, digits)
+		for _, v := range m[digits[0]] {
+			dfs(temp+v, digits[1:])
 		}
 	}
-	dfs("", digs)
+	dfs("", strings.Split(digits, ""))
 	return res
 }
