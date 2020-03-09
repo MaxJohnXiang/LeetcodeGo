@@ -9,23 +9,23 @@ func threeSumClosest(nums []int, target int) int {
 	sort.Ints(nums)
 
 	max := nums[0] + nums[1] + nums[2]
-	for i := 0; i < len(nums)-2; i++ {
+	closest := max - target
+	for i := 0; i < len(nums); i++ {
 		lo, hi := i+1, len(nums)-1
 		for lo < hi {
+			//只有大于或者小于
 			sum := nums[i] + nums[lo] + nums[hi]
-
-			if sum < target {
+			if sum-target < 0 {
 				lo++
 			} else {
 				hi--
 			}
-
-			if abs(sum-target) < abs(max-target) {
+			if abs(sum-target) < abs(closest) {
+				closest = sum - target
 				max = sum
 			}
 		}
 	}
-
 	return max
 }
 
