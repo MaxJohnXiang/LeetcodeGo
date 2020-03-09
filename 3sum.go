@@ -1,5 +1,5 @@
 // package problem0015
-
+//
 // import "sort"
 
 func threeSum(nums []int) [][]int {
@@ -10,13 +10,12 @@ func threeSum(nums []int) [][]int {
 
 	res := make([][]int, 0)
 	for i := 0; i < len(nums)-2; i++ {
-		lo := i + 1
-		hi := len(nums) - 1
 		if i == 0 || (i > 0 && nums[i] != nums[i-1]) {
-
+			lo, hi := i+1, len(nums)-1
 			for lo < hi {
-				if nums[lo]+nums[hi]+nums[i] == 0 {
-					res = append(res, []int{nums[lo], nums[hi], nums[i]})
+				sum := nums[i] + nums[lo] + nums[hi]
+				if sum == 0 {
+					res = append(res, []int{nums[i], nums[lo], nums[hi]})
 					for lo < hi && nums[lo] == nums[lo+1] {
 						lo++
 					}
@@ -25,7 +24,7 @@ func threeSum(nums []int) [][]int {
 					}
 					lo++
 					hi--
-				} else if nums[lo]+nums[hi]+nums[i] > 0 {
+				} else if sum > 0 {
 					hi--
 				} else {
 					lo++
