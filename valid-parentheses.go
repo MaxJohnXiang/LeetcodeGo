@@ -17,14 +17,17 @@ func (s *Stack) Pop() byte {
 func isValid(s string) bool {
 	stack := &Stack{}
 	for i := 0; i < len(s); i++ {
-		if s[i] == '(' {
+		switch s[i] {
+		case '(':
 			stack.Push(')')
-		} else if s[i] == '[' {
-			stack.Push(']')
-		} else if s[i] == '{' {
+
+		case '{':
 			stack.Push('}')
-		} else {
-			if len(stack.list) <= 0 || stack.Pop() != s[i] {
+
+		case '[':
+			stack.Push(']')
+		default:
+			if len(stack.list) == 0 || stack.Pop() != s[i] {
 				return false
 			}
 		}
