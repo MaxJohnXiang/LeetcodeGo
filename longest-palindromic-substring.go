@@ -1,30 +1,30 @@
 // package problem0005
 
 func longestPalindrome(s string) string {
+	// froi
 	if len(s) < 2 {
 		return s
 	}
-
-	var max string
-	for i := 0; i < len(s); i++ {
-		max = isPlidrome(s, i, i, max)
-		max = isPlidrome(s, i, i+1, max)
+	max := ""
+	for i := 0; i < len(s)-1; i++ {
+		max = isPalindrome(s, i, i, max)
+		max = isPalindrome(s, i+1, i, max)
 	}
+
 	return max
 }
 
-func isPlidrome(s string, i, j int, max string) string {
+// judge that string is palindrome or not
+func isPalindrome(s string, i, j int, max string) string {
+		tmp := ""
+		for i >= 0 && j < len(s) && s[i] == s[j] {
+			tmp = s[i:j+1]
+			if len(tmp) > len(max) {
+				max = tmp
+			}
+			i--
+			j++
+		}
 
-	var sub string
-	for i >= 0 && j < len(s) && s[i] == s[j] {
-		sub = s[i : j+1]
-		i--
-		j++
-	}
-
-	if len(sub) > len(max) {
-		max = sub
-	}
-
-	return max
+		return max
 }
