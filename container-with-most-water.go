@@ -4,17 +4,15 @@ func maxArea(height []int) int {
 	//这是一个双指针， 如何移动， 能够遍历到最大面积的区域
 	//从中心向两边扩张
 	//从两边向中心靠
-	i, j := 0, len(height)-1
 
 	max := 0
+	i, j := 0, len(height)-1
+
 	for i < j {
-		h := min(height[i], height[j])
-		area := h * (j - i)
+		area := getArea(i, j, height)
 		if area > max {
 			max = area
 		}
-
-		//移动短板
 		if height[i] < height[j] {
 			i++
 		} else {
@@ -29,4 +27,8 @@ func min(i, j int) int {
 		return i
 	}
 	return j
+}
+
+func getArea(i, j int, height []int) int {
+	return (j - i) * min(height[i], height[j])
 }
