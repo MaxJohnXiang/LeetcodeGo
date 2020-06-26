@@ -1,78 +1,40 @@
 // package problem0076
 
 func minWindow(s string, t string) string {
-
 	have := [128]int{}
 	need := [128]int{}
+
+	//3、此时，我们停止增加 right，转而不断增加 left 指针缩小窗口 [left, right)，直到窗口中的字符串不再符合要求（不包含 T 中的所有字符了）。同时，每次增加 left，我们都要更新一轮结果。
+	//4、重复第 2 和第 3 步，直到 right 到达字符串 S 的尽头。
 
 	//init need
-	for _, v := range t {
-		need[v]++
-	}
-
-	minLen := len(s) + 1
-
-	matchCount := 0
-
-	slow, fast := 0, 0
-
-	res := ""
-	for ; fast < len(s); fast++ {
-		//这个字符是否在 need 中出现过了, 如果出现过了,  matchCount++
-		//如果这个字符是
-		if have[s[fast]] < need[s[fast]] {
-			matchCount++
-		}
-		have[s[fast]]++
-
-		//shorter the window
-		for slow <= fast && have[s[slow]] > need[s[slow]] {
-			have[s[slow]]--
-			slow++
-		}
-
-		//.ji
-		if matchCount == len(t) && fast-slow+1 <= minLen {
-			minLen = fast - slow + 1
-			res = s[slow : fast+1]
-		}
-	}
-
-	return res
-}
-func minWindow1(s string, t string) string {
-	have := [128]int{}
-	need := [128]int{}
-	for i := range t {
+	for i := 0; i < len(t); i++ {
 		need[t[i]]++
 	}
 
-	size, total := len(s), len(t)
-
-	min := size + 1
+	left, right := 0, 0
 	res := ""
+	min := len(s) + 1
 
-	// s[i:j+1] 就是 window
-	// count 用于统计已有的 t 中字母的数量。
-	// count == total 表示已经收集完需要的全部字母
-	for i, j, count := 0, 0, 0; j < size; j++ {
-		if have[s[j]] < need[s[j]] {
-			// 出现了 window 中缺失的字母
-			count++
-		}
-		have[s[j]]++
+	matchCount := 0
+	//1、我们在字符串 S 中使用双指针中的左右指针技巧，初始化 left = right = 0，把索引左闭右开区间 [left, right) 称为一个「窗口」。
+	for ; right < len(s); right++ {
+		//2、我们先不断地增加 right 指针扩大窗口 [left, right)，直到窗口中的字符串符合要求（包含了 T 中的所有字符）。
+		//什么时字符会++
+		have[s[right]]++
 
-		// 保证 window 不丢失所需字母的前提下
-		// 让 i 尽可能的大
-		for i <= j && have[s[i]] > need[s[i]] {
-			have[s[i]]--
-			i++
+		if have[s[right]] <= need[s[right]] {
+			matchCount++
 		}
 
-		width := j - i + 1
-		if count == total && min > width {
-			min = width
-			res = s[i : j+1]
+		for left <= right && have[s[left]] > need[s[left]] {
+			have[s[left]]--
+			left++
+		}
+
+		if matchCount == len(t) && right-left+1 <= min {
+			res = s[left : right+1]
+			min = right - left + 1
 		}
 	}
 
