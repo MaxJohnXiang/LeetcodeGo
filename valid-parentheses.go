@@ -15,17 +15,15 @@ func (s *Stack) Pop() byte {
 }
 
 func isValid(s string) bool {
-	stack := &Stack{}
+	stack := &Stack{list: make([]byte, 0)}
 	for i := 0; i < len(s); i++ {
 		switch s[i] {
-		case '(':
-			stack.Push(')')
-
-		case '{':
-			stack.Push('}')
-
 		case '[':
 			stack.Push(']')
+		case '{':
+			stack.Push('}')
+		case '(':
+			stack.Push(')')
 		default:
 			if len(stack.list) == 0 || stack.Pop() != s[i] {
 				return false
